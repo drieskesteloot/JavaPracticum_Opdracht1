@@ -36,9 +36,11 @@ public class Datum {
 	public Datum(String Dat) {
 		String DatumString[] = Dat.split("/");
 		String sDag = DatumString[0];
+		if (sDag.substring(0, 1) == "0") { sDag = sDag.substring(2,1); }	
 		String sMaand = DatumString[1];
+		if (sMaand.substring(0, 1) == "0") { sMaand = sMaand.substring(2,1); }	
 		String sJaar = DatumString[2];
-		if (sMaand.substring(0, 1) == "0") { sMaand = sMaand.substring(0,2); }		
+			
 		int Dag = Integer.parseInt(sDag);
 		int Maand = Integer.parseInt(sMaand);
 		int Jaar = Integer.parseInt(sJaar);
@@ -106,10 +108,23 @@ public class Datum {
 	// functies
 	
 	public boolean kleinerDan(Datum d) {
-		String datumInString = Integer.toString(d.jaar) + Integer.toString(d.maand) + Integer.toString(d.dag);
-		String huidigeInString = Integer.toString(this.jaar) + Integer.toString(this.maand) + Integer.toString(this.dag);
+		
+		String str_dDag = Integer.toString(d.dag);
+		String str_dMaand = Integer.toString(d.maand);
+		String str_hDag = Integer.toString(this.dag);
+		String str_hMaand = Integer.toString(this.maand);
+		
+		if ( d.dag < 10 ) { str_dDag = "0" + Integer.toString(d.dag); }
+		if ( d.maand < 10 ) { str_dMaand = "0" + Integer.toString(d.maand); }
+		String datumInString = Integer.toString(d.jaar) + str_dMaand + str_dDag;
+		
+		if ( this.dag < 10 ) { str_hDag = "0" + Integer.toString(this.dag); }
+		if ( this.maand < 10 ) { str_hMaand = "0" + Integer.toString(this.maand); }
+		String huidigeInString = Integer.toString(this.jaar) + str_hMaand + str_hDag;
+		
 		int datum = Integer.parseInt(datumInString);
 		int huidig = Integer.parseInt(huidigeInString);
+		
 		if (datum < huidig)  {
 			return true;
 		} else {
@@ -155,12 +170,15 @@ public class Datum {
 		try 
 		{
 			int dagen = 10;
-			Datum date = new Datum(21,10,2015);
-			Datum date2 = new Datum(20/09/2015);
+			Datum date = new Datum(04,01,2013);
+			Datum date2 = new Datum("05/01/2013");
 			System.out.println("Huidige datum: " + date);
 			date.veranderDatum(dagen);
 			System.out.println("Dagen bij te tellen: " + dagen);
 			System.out.println("Aangepaste datum: " + date);
+			System.out.println("");
+			if (date.kleinerDan(date2)) { System.out.println(date2 + " is kleiner dan " + date); } else { System.out.println(date2 + " is groter dan " + date);}
+			System.out.println("Datum 2: " + date2);
 		}
 		catch (IllegalArgumentException ex){System.out.println(ex.getMessage());}
 	}
