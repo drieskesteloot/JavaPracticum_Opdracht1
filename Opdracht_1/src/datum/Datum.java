@@ -56,7 +56,7 @@ public class Datum {
 		
 		if (dag < 1 || dag > 31) throw new IllegalArgumentException ("Een maand telt nooit meer dan 31 dagen.");
 		if (maand < 1 || maand > 12) throw new IllegalArgumentException ("Een jaar telt nooit meer dan 12 maanden.");
-		if (jaar < 0) throw new IllegalArgumentException ("De jaartellingen zijn begonnen vanaf 0");
+		if (jaar < 0) throw new IllegalArgumentException ("De jaartellingen zijn begonnen vanaf 0"); 
 		if (dag == 29 && maand == 02 && !isSchrikkeljaar(jaar)) throw new IllegalArgumentException ("De maand februari telt in het jaar " + jaar + " geen 29 dagen.");
 		if (dag > 29 && maand == 02) throw new IllegalArgumentException ("De maand februari telt nooit meer dan 29 dagen.");
 		if (dag == 31 && !Arrays.asList(MaandenMet31Dagen).contains(maand)) throw new IllegalArgumentException ("Deze maand telt geen 31 dagen.");
