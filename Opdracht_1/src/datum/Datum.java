@@ -53,16 +53,9 @@ public class Datum {
 	
 	private boolean setDatum(int dag, int maand, int jaar) throws IllegalArgumentException {
 		
-		int TestJaar = jaar % 4; // resultaat is 0 indien deelbaar door 4
-		int JaarIsEeuw = jaar % 100;
-		int TestJaarEeuw = jaar % 400;
 		if (dag < 1 || dag > 31) throw new IllegalArgumentException ("Een maand telt nooit meer dan 31 dagen.");
 		if (maand < 1 || maand > 12) throw new IllegalArgumentException ("Een jaar telt nooit meer dan 12 maanden.");
-		if (JaarIsEeuw == 0) {
-			if (dag == 29 && maand == 02 && TestJaarEeuw != 0) throw new IllegalArgumentException ("De maand februari telt in het jaar " + jaar + " geen 29 dagen.");
-		} else {
-			if (dag == 29 && maand == 02 && TestJaar != 0) throw new IllegalArgumentException ("De maand februari telt in het jaar " + jaar + " geen 29 dagen.");
-		}
+		if (dag == 29 && maand == 02 && !isSchrikkeljaar(jaar)) throw new IllegalArgumentException ("De maand februari telt in het jaar " + jaar + " geen 29 dagen.");
 		if (dag > 29 && maand == 02) throw new IllegalArgumentException ("De maand februari telt nooit meer dan 29 dagen.");
 		if (dag == 31 && !Arrays.asList(MaandenMet31Dagen).contains(maand)) throw new IllegalArgumentException ("Deze maand telt geen 31 dagen.");
 		
@@ -74,21 +67,21 @@ public class Datum {
 		
 	}
 	// Dag
-	private int getDag() {
+	public int getDag() {
 		return this.dag;
 	}
 	private void setDag(int dag) {
 		this.dag = dag;
 	}
 	// Maand
-	private int getMaand() {
+	public int getMaand() {
 		return this.maand;
 	}
 	private void setMaand(int maand) {
 		this.maand = maand;
 	}
 	// Jaar
-	private int getJaar() {
+	public int getJaar() {
 		return this.jaar;
 	}
 	private void setJaar(int jaar) {
@@ -105,21 +98,33 @@ public class Datum {
 		return EuropeseDatum;
 	}
 	
+	// Controle functie
+	
+	private boolean isSchrikkeljaar(int jaar) {
+		boolean Schrikkeljaar = false;
+		int TestJaar = jaar % 4; // resultaat is 0 indien deelbaar door 4
+		int JaarIsEeuw = jaar % 100;
+		int TestJaarEeuw = jaar % 400;
+		if (JaarIsEeuw == 0) {
+			if (TestJaarEeuw == 0) { return true; }
+		} else if (TestJaar == 0) { 
+			return true;
+		} else {
+			return false;
+		}
+		return Schrikkeljaar;
+	}
+	
 	// functies
 	
 	public boolean kleinerDan(Datum d) {
 		
-		String str_dDag = Integer.toString(d.dag);
-		String str_dMaand = Integer.toString(d.maand);
-		String str_hDag = Integer.toString(this.dag);
-		String str_hMaand = Integer.toString(this.maand);
-		
-		if ( d.dag < 10 ) { str_dDag = "0" + Integer.toString(d.dag); }
-		if ( d.maand < 10 ) { str_dMaand = "0" + Integer.toString(d.maand); }
+		String str_dDag = d.dag < 10 ? "0" + Integer.toString(d.dag) : Integer.toString(d.dag);
+		String str_dMaand = d.maand < 10 ? "0" + Integer.toString(d.maand) : Integer.toString(d.maand);
+		String str_hDag = this.dag < 10 ? "0" + Integer.toString(this.dag) : Integer.toString(this.dag);
+		String str_hMaand = this.maand < 10 ? "0" + Integer.toString(this.maand) : Integer.toString(this.maand);
+
 		String datumInString = Integer.toString(d.jaar) + str_dMaand + str_dDag;
-		
-		if ( this.dag < 10 ) { str_hDag = "0" + Integer.toString(this.dag); }
-		if ( this.maand < 10 ) { str_hMaand = "0" + Integer.toString(this.maand); }
 		String huidigeInString = Integer.toString(this.jaar) + str_hMaand + str_hDag;
 		
 		int datum = Integer.parseInt(datumInString);
@@ -140,13 +145,8 @@ public class Datum {
 		for (int d = aantalDagen; d < 0; d--) {
 			if (Arrays.asList(MaandenMet31Dagen).contains(maand)) { 
 				dagenInMaand = 31; 
-			} else if (maand == 2) {
-				int TestJaar = jaar % 4, JaarIsEeuw = jaar % 100, TestJaarEeuw = jaar % 400;
-				if (JaarIsEeuw == 0) {
-					if (TestJaarEeuw != 0) { dagenInMaand = 28; } else { dagenInMaand = 29; }
-				} else {
-					if (TestJaar != 0) { dagenInMaand = 28; } else { dagenInMaand = 29; }
-				} 
+			} else if (maand == 2 && isSchrikkeljaar(jaar)) { 
+				dagenInMaand = 29;
 			} else {
 				dagenInMaand = 30;
 			}
@@ -170,7 +170,7 @@ public class Datum {
 		try 
 		{
 			int dagen = 10;
-			Datum date = new Datum(04,01,2013);
+			Datum date = new Datum(29,2,1600);
 			Datum date2 = new Datum("05/01/2013");
 			System.out.println("Huidige datum: " + date);
 			date.veranderDatum(dagen);
@@ -190,5 +190,3 @@ public class Datum {
 	
 	
 }
-
-// kIrsod
