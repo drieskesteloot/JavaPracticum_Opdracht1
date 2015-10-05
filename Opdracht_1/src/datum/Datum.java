@@ -156,7 +156,7 @@ public class Datum {
 		{
 			int dagen = 10;
 			Datum date = new Datum(21,10,2015);
-			Datum date2 = new Datum(20/09/2015);
+			//Datum date2 = new Datum(20/09/2015);
 			System.out.println("Huidige datum: " + date);
 			date.veranderDatum(dagen);
 			System.out.println("Dagen bij te tellen: " + dagen);
