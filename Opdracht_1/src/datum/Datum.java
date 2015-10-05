@@ -117,20 +117,38 @@ public class Datum {
 		return Schrikkeljaar;
 	}
 	
-	// functies
-	
-	public boolean kleinerDan(Datum d) {
+	private int datumSamenvoegen(Datum d, String volgorde) {
 		
 		String str_dDag = d.dag < 10 ? "0" + Integer.toString(d.dag) : Integer.toString(d.dag);
 		String str_dMaand = d.maand < 10 ? "0" + Integer.toString(d.maand) : Integer.toString(d.maand);
-		String str_hDag = this.dag < 10 ? "0" + Integer.toString(this.dag) : Integer.toString(this.dag);
-		String str_hMaand = this.maand < 10 ? "0" + Integer.toString(this.maand) : Integer.toString(this.maand);
-
-		String datumInString = Integer.toString(d.jaar) + str_dMaand + str_dDag;
-		String huidigeInString = Integer.toString(this.jaar) + str_hMaand + str_hDag;
+		String str_dJaar = Integer.toString(d.jaar);
+		String datumInString = "";
+		switch (volgorde) {
+			case "ddmmjjjj":
+				datumInString = str_dDag + str_dMaand + str_dJaar;
+				break;
+			case "mmddjjjj":
+				datumInString = str_dMaand + str_dDag + str_dJaar;
+				break;
+			case "jjjjmmdd":
+				datumInString = str_dJaar + str_dMaand + str_dDag;
+				break;
+			default:
+				datumInString = str_dJaar + str_dMaand + str_dDag;
+				break;
+		}
 		
 		int datum = Integer.parseInt(datumInString);
-		int huidig = Integer.parseInt(huidigeInString);
+		
+		return datum;
+	}
+	
+	// functies
+	
+	public boolean kleinerDan(Datum d) { //jjjjmmdd
+		
+		int datum = datumSamenvoegen(d, "jjjjmmdd");
+		int huidig = datumSamenvoegen(this, "jjjjmmdd");
 		
 		if (datum < huidig)  {
 			return true;
@@ -139,8 +157,12 @@ public class Datum {
 		}
 	}
 	
-	public int verschilInJaren(Datum d) {
+	public int verschilInJaren(Datum d) { //ddmmjjjj
 		
+		int datum = datumSamenvoegen(d, "jjjjmmdd");
+		int huidig = datumSamenvoegen(this,"jjjjmmdd");
+		
+		return datum - huidig;
 	}
 	
 	public void veranderDatum(int aantalDagen) {
@@ -176,7 +198,7 @@ public class Datum {
 		try 
 		{
 			int dagen = 10;
-			Datum date = new Datum(29,2,1600);
+			Datum date = new Datum(28,2,2012);
 			Datum date2 = new Datum("05/01/2013");
 			System.out.println("Huidige datum: " + date);
 			date.veranderDatum(dagen);
@@ -185,6 +207,7 @@ public class Datum {
 			System.out.println("");
 			if (date.kleinerDan(date2)) { System.out.println(date2 + " is kleiner dan " + date); } else { System.out.println(date2 + " is groter dan " + date);}
 			System.out.println("Datum 2: " + date2);
+			System.out.println("Deze 2 datums verschillen met " + date.verschilInJaren(date2) +  " jaar");
 		}
 		catch (IllegalArgumentException ex){System.out.println(ex.getMessage());}
 	}
