@@ -19,6 +19,7 @@ public class Datum {
 	//comment mutlu
 	
 	private static final int[] MaandenMet31Dagen = new int[] {1,3,5,7,8,10,12};
+	private static final int[] MaandenMetDagen = new int[] {0,31,28,31,30,31,30,31,31,30,31,30,31};
 	private static final String[] Maanden = new String[] { "januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"};
 	
 	public Datum() {
@@ -59,7 +60,7 @@ public class Datum {
 		if (jaar < 0) throw new IllegalArgumentException ("De jaartellingen zijn begonnen vanaf 0"); 
 		if (dag == 29 && maand == 02 && !isSchrikkeljaar(jaar)) throw new IllegalArgumentException ("De maand februari telt in het jaar " + jaar + " geen 29 dagen.");
 		if (dag > 29 && maand == 02) throw new IllegalArgumentException ("De maand februari telt nooit meer dan 29 dagen.");
-		if (dag == 31 && !Arrays.asList(MaandenMet31Dagen).contains(maand)) throw new IllegalArgumentException ("Deze maand telt geen 31 dagen.");
+		if ( dag == 31 && dag != MaandenMetDagen[maand]) throw new IllegalArgumentException ("Deze maand telt geen "+dag+" dagen.");
 		
 		setDag(dag);
 		setMaand(maand);
@@ -170,13 +171,11 @@ public class Datum {
 		int maand = getMaand();
 		int jaar = getJaar();
 		int dagenInMaand;
-		for (int d = aantalDagen; d < 0; d--) {
-			if (Arrays.asList(MaandenMet31Dagen).contains(maand)) { 
-				dagenInMaand = 31; 
-			} else if (maand == 2 && isSchrikkeljaar(jaar)) { 
+		for (int d = aantalDagen; d > 0; d--) {
+			if (maand == 2 && isSchrikkeljaar(jaar)) { 
 				dagenInMaand = 29;
 			} else {
-				dagenInMaand = 30;
+				dagenInMaand = MaandenMetDagen[maand];
 			}
 			dag++;
 			int overMaand = dagenInMaand + 1;
@@ -198,7 +197,7 @@ public class Datum {
 		try 
 		{
 			int dagen = 10;
-			Datum date = new Datum(28,2,2012);
+			Datum date = new Datum(31,1,2012);
 			Datum date2 = new Datum("05/01/2013");
 			System.out.println("Huidige datum: " + date);
 			date.veranderDatum(dagen);
@@ -208,6 +207,7 @@ public class Datum {
 			if (date.kleinerDan(date2)) { System.out.println(date2 + " is kleiner dan " + date); } else { System.out.println(date2 + " is groter dan " + date);}
 			System.out.println("Datum 2: " + date2);
 			System.out.println("Deze 2 datums verschillen met " + date.verschilInJaren(date2) +  " jaar");
+			System.out.println(MaandenMetDagen[1]);
 		}
 		catch (IllegalArgumentException ex){System.out.println(ex.getMessage());}
 	}
