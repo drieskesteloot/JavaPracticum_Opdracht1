@@ -229,10 +229,7 @@ public class Datum {
 	
 	public int verschilInMaanden(Datum d) {
 
-		int aantalInt = verschilInDagen(d);
-		double aantal = aantalInt / 30;
-		aantalInt = (int) aantal;
-		return aantalInt;
+		return 0;
 		
 	}
 	
@@ -248,35 +245,45 @@ public class Datum {
 		int dDag = d.dag;
 		int dMaand = d.maand;
 		int dJaar = d.jaar;
-		
-		double aantal = 0;
-		int aantalInt = 0;
-		
-		int aantalSchrikkeljaren = 0;
-		for (int j = huidigJaar; j < dJaar; j++) {
-			aantalSchrikkeljaren += isSchrikkeljaar(j) ? 1 : 0;
-		}
+
+		int dv = 0;
 		if (huidigJaar != dJaar) {
-			aantal = (datum - huidig) / 27.3972603;
-			int dagenVerschil = dDag == huidigeDag ? aantalSchrikkeljaren : dDag - huidigeDag;
-			aantalInt = (int) ( aantal + dagenVerschil + 1 );
+			for (int i = d.jaar-1; i> jaar; i--){
+				if(isSchrikkeljaar(i)){
+					dv++;
+				}
+				dv += 365;
+			}
+			dv+=dagVanHetJaar(d.dag, d.maand, d.jaar);
+			dv+=(365-dagVanHetJaar(dag, maand, jaar));
+			if(isSchrikkeljaar(jaar)) {dv++;}
 		} else if (huidigJaar == dJaar) {
 			if (huidigeMaand == dMaand) {
-				aantalInt = dDag - huidigeDag;
+				dv = dDag - huidigeDag;
 			} else {
-				aantalInt += (dDag - huidigeDag);
+				dv += (dDag - huidigeDag);
 				for (int m = huidigeMaand; m < dMaand; m++) {
-					aantalInt += MaandenMetDagen[m];
+					dv += MaandenMetDagen[m];
 					if (isSchrikkeljaar(huidigJaar) && m == 2) {
-						aantalInt++;
+						dv++;
 					}
 				}
 			}
 		}
-		
-		return aantalInt;
-		
+		return dv;
 	}
+	
+	 public int dagVanHetJaar( int dag, int maand, int jaar){
+
+		 int dagen = dag;
+		 for(int i = 1; i < maand; i++){
+		 dagen += MaandenMetDagen[i];
+		 }
+		 if(isSchrikkeljaar(jaar)&&maand>1){dagen++;}
+		 return dagen;
+
+		 }
+
 	
 	public void veranderDatum(int aantalDagen) {
 		int dag = getDag();
@@ -334,11 +341,11 @@ public class Datum {
 	public static void main(String[] args) {
 		try 
 		{
-			Datum date = new Datum(1,1,2004);
-			Datum date2 = new Datum("1/3/2005");
+			Datum date = new Datum(01,01,2000);
+			Datum date2 = new Datum("02/12/2000");
 			System.out.println("Huidige datum: " + date);
 			System.out.println("Datum 2: " + date2);
-			System.out.println("Deze 2 datums verschillen met " + date.verschilInMaanden(date2) +  " maanden");
+			System.out.println("Deze 2 datums verschillen met " + date.verschilInDagen(date2) +  " dagen");
 		}
 		catch (IllegalArgumentException ex){System.out.println(ex.getMessage());}
 	}
