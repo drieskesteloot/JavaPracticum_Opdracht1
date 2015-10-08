@@ -144,6 +144,32 @@ public class Datum {
 		return datum;
 	}
 	
+	private int datumSamenvoegen(int d, int m, int j, String volgorde) {
+		
+		String str_dDag = d < 10 ? "0" + Integer.toString(d) : Integer.toString(d);
+		String str_dMaand = m < 10 ? "0" + Integer.toString(m) : Integer.toString(m);
+		String str_dJaar = Integer.toString(j);
+		String datumInString = "";
+		switch (volgorde) {
+			case "ddmmjjjj":
+				datumInString = str_dDag + str_dMaand + str_dJaar;
+				break;
+			case "mmddjjjj":
+				datumInString = str_dMaand + str_dDag + str_dJaar;
+				break;
+			case "jjjjmmdd":
+				datumInString = str_dJaar + str_dMaand + str_dDag;
+				break;
+			default:
+				datumInString = str_dJaar + str_dMaand + str_dDag;
+				break;
+		}
+		
+		int datum = Integer.parseInt(datumInString);
+		
+		return datum;
+	}
+	
 	// functies
 	
 	public boolean kleinerDan(Datum d) { //jjjjmmdd
@@ -158,12 +184,98 @@ public class Datum {
 		}
 	}
 	
-	public int verschilInJaren(Datum d) { //ddmmjjjj
+	public int verschilInJaren(Datum d) { //jjjjmmdd
 		
 		int datum = datumSamenvoegen(d, "jjjjmmdd");
 		int huidig = datumSamenvoegen(this,"jjjjmmdd");
 		
-		return datum - huidig;
+		int huidigeDag = getDag();
+		int huidigeMaand = getMaand();
+		int huidigJaar = getJaar();
+		
+		int dDag = d.dag;
+		int dMaand = d.maand;
+		int dJaar = d.jaar;
+
+		int aantalJaren = 0;
+		
+		if (datum > huidig) {
+			do {
+				huidigJaar++;
+				aantalJaren++;
+			} while (dJaar > huidigJaar);
+			if (huidigJaar == dJaar) {
+				if (huidigeMaand > dMaand) { 
+					aantalJaren--; 
+				} else if (huidigeDag > dDag) {
+					aantalJaren--;
+				}
+			}
+		} else if (datum < huidig) {
+			do {
+				dJaar++;
+				aantalJaren++;
+			} while (dJaar < huidigJaar);
+			if (huidigJaar == dJaar) {
+				if (huidigeMaand > dMaand) { 
+					aantalJaren--; 
+				} else if (huidigeDag < dDag) {
+					aantalJaren--;
+				}
+			}
+		}
+		return aantalJaren;
+	}
+	
+	public int verschilInMaanden(Datum d) {
+
+		int aantalInt = verschilInDagen(d);
+		double aantal = aantalInt / 30;
+		aantalInt = (int) aantal;
+		return aantalInt;
+		
+	}
+	
+	public int verschilInDagen(Datum d) {
+		
+		int datum = datumSamenvoegen(d, "jjjjmmdd");
+		int huidig = datumSamenvoegen(this,"jjjjmmdd");
+		
+		int huidigeDag = getDag();
+		int huidigeMaand = getMaand();
+		int huidigJaar = getJaar();
+		
+		int dDag = d.dag;
+		int dMaand = d.maand;
+		int dJaar = d.jaar;
+		
+		double aantal = 0;
+		int aantalInt = 0;
+		
+		int aantalSchrikkeljaren = 0;
+		for (int j = huidigJaar; j < dJaar; j++) {
+			aantalSchrikkeljaren += isSchrikkeljaar(j) ? 1 : 0;
+		}
+		if (huidigJaar != dJaar) {
+			aantal = (datum - huidig) / 27.3972603;
+			int dagenVerschil = dDag == huidigeDag ? aantalSchrikkeljaren : dDag - huidigeDag;
+			aantalInt = (int) ( aantal + dagenVerschil + 1 );
+		} else if (huidigJaar == dJaar) {
+			if (huidigeMaand == dMaand) {
+				aantalInt = dDag - huidigeDag;
+			} else {
+				aantalInt += (dDag - huidigeDag);
+				for (int m = huidigeMaand; m < dMaand; m++) {
+					aantalInt += MaandenMetDagen[m];
+					if (isSchrikkeljaar(huidigJaar) && m == 2) {
+						aantalInt++;
+					}
+				}
+			}
+		}
+		
+		return aantalInt;
+		
 	}
 	
 	public void veranderDatum(int aantalDagen) {
@@ -191,23 +303,42 @@ public class Datum {
 		setDatum(dag,maand,jaar);
 	}
 	
+	public Datum veranderDatumObj(int aantalDagen) {
+		int dag = getDag();
+		int maand = getMaand();
+		int jaar = getJaar();
+		int dagenInMaand;
+		for (int d = aantalDagen; d > 0; d--) {
+			if (maand == 2 && isSchrikkeljaar(jaar)) { 
+				dagenInMaand = 29;
+			} else {
+				dagenInMaand = MaandenMetDagen[maand];
+			}
+			dag++;
+			int overMaand = dagenInMaand + 1;
+			if (dag == overMaand) {
+				maand++;
+				dag = 1;
+				if (maand == 13) {
+					jaar++;
+					maand = 1;
+				}
+			}
+		}
+		Datum date = new Datum(dag,maand,jaar);
+		return date;
+	}
+	
 	// Kleine test in de main om de constructoren te testen.
 	
 	public static void main(String[] args) {
 		try 
 		{
-			int dagen = 10;
-			Datum date = new Datum(31,1,2012);
-			Datum date2 = new Datum("05/01/2013");
+			Datum date = new Datum(1,1,2004);
+			Datum date2 = new Datum("1/3/2005");
 			System.out.println("Huidige datum: " + date);
-			date.veranderDatum(dagen);
-			System.out.println("Dagen bij te tellen: " + dagen);
-			System.out.println("Aangepaste datum: " + date);
-			System.out.println("");
-			if (date.kleinerDan(date2)) { System.out.println(date2 + " is kleiner dan " + date); } else { System.out.println(date2 + " is groter dan " + date);}
 			System.out.println("Datum 2: " + date2);
-			System.out.println("Deze 2 datums verschillen met " + date.verschilInJaren(date2) +  " jaar");
-			System.out.println(MaandenMetDagen[1]);
+			System.out.println("Deze 2 datums verschillen met " + date.verschilInMaanden(date2) +  " maanden");
 		}
 		catch (IllegalArgumentException ex){System.out.println(ex.getMessage());}
 	}
