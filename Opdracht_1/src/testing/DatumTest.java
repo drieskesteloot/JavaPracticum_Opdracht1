@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Date;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import datum.Datum;
@@ -213,7 +214,14 @@ public class DatumTest {
 		assertEquals(0, datumX.compareTo(datumY));
 	}
 	
-	
+	@Test
+    public void test_ToString()
+    {
+        Datum datum = new Datum();
+        String expected = "4 februari 2009"; 
+        assertEquals(expected, datum.toString());
+        assertEquals(datum.toString(), expected);
+    }
 	
 	
 	
