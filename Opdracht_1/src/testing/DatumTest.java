@@ -36,10 +36,10 @@ public class DatumTest {
 		Date huidigeTijd = new Date();
 		Datum nu = new Datum();
 	
-		assertEquals(huidigeTijd.getDate()+1,nu.getDag());
+		assertEquals(huidigeTijd.getDate(),nu.getDag());
 		assertEquals(huidigeTijd.getMonth()+1,nu.getMaand());
 		assertEquals(huidigeTijd.getYear()+1900,nu.getJaar());
-		assertEquals(nu.getDag(), huidigeTijd.getDate()+1);
+		assertEquals(nu.getDag(), huidigeTijd.getDate());
 		assertEquals(nu.getMaand(), huidigeTijd.getMonth()+1);
 		assertEquals(nu.getJaar(), huidigeTijd.getYear()+1900);
 	}
