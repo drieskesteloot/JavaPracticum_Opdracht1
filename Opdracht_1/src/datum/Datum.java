@@ -346,6 +346,7 @@ public class Datum {
 			System.out.println("Huidige datum: " + date);
 			System.out.println("Datum 2: " + date2);
 			System.out.println("Deze 2 datums verschillen met " + date.verschilInDagen(date2) +  " dagen");
+			
 		}
 		catch (IllegalArgumentException ex){System.out.println(ex.getMessage());}
 	}
