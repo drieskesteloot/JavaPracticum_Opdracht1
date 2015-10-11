@@ -215,6 +215,20 @@ public class DatumTest {
 	}
 	
 	@Test
+	public void test_DatumInAmerikaansFormaat()
+	{
+		assertEquals("1982/3/10", datumX.getDatumInAmerikaansFormaat());
+		assertEquals(datumX.getDatumInAmerikaansFormaat(), "1982/3/10");
+	}
+	
+	@Test
+	public void test_DatumInEuropeesFormaat()
+	{
+		assertEquals("10/3/1982", datumX.getDatumInEuropeesFormaat());
+		assertEquals(datumX.getDatumInEuropeesFormaat(), "10/3/1982");
+	}
+	
+	@Test
     public void test_ToString()
     {
         Datum datum = new Datum();
