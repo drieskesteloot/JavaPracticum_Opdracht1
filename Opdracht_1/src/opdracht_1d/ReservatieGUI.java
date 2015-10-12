@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class Test2 {
+public class ReservatieGUI {
 
 	protected Shell shlReservatietool;
 	private Text FirstNameText;
@@ -18,7 +18,7 @@ public class Test2 {
 	 */
 	public static void main(String[] args) {
 		try {
-			Test2 window = new Test2();
+			ReservatieGUI window = new ReservatieGUI();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
