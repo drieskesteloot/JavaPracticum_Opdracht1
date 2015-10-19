@@ -341,12 +341,11 @@ public class Datum {
 	public static void main(String[] args) {
 		try 
 		{
-			Datum date = new Datum(01,01,2000);
+			Datum date = new Datum(10,12,2000);
 			Datum date2 = new Datum("02/12/2000");
-			System.out.println("Huidige datum: " + date);
+			System.out.println("Huidige datum: " + date.getDatumInAmerikaansFormaat(date));
 			System.out.println("Datum 2: " + date2);
 			System.out.println("Deze 2 datums verschillen met " + date.verschilInDagen(date2) +  " dagen");
-			
 		}
 		catch (IllegalArgumentException ex){System.out.println(ex.getMessage());}
 	}
@@ -356,5 +355,31 @@ public class Datum {
 		return Integer.toString(dag) + " " + Maanden[maand-1] +" "+ Integer.toString(jaar);
 	}
 	
+	@Override
+	public boolean equals(Object oD) {
+		
+		if (this == oD) return true;
+		if (!(oD instanceof Datum)) return false;
+		
+		Datum d = (Datum)oD;
+		
+		int dDag = d.dag;
+		int dMaand = d.maand;
+		int dJaar = d.jaar;
+		
+		if (dDag != getDag()) return false;
+		if (dMaand != getMaand()) return false;
+		if (dJaar != getJaar()) return false;
+		
+		return true;
+		
+	}
+	
+	public int compareTo(Datum d) {
+		int verschil = datumSamenvoegen(this, "yyyymmdd") - datumSamenvoegen(d,"yyyymmdd");
+		if (verschil < 0) return -1;
+		if (verschil > 0) return 1;
+		return 0;
+	}
 	
 } 
