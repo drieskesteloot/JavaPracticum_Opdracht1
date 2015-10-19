@@ -93,7 +93,7 @@ public class Datum {
 	
 	// Getters formaten
 	public String getDatumInAmerikaansFormaat(Datum d) {
-		String AmerikaanseDatum = Integer.toString(getMaand()) + "/" + Integer.toString(getDag()) + "/" + Integer.toString(getJaar());
+		String AmerikaanseDatum = Integer.toString(getJaar()) + "/" + Integer.toString(getMaand()) + "/" + Integer.toString(getDag());
 		return AmerikaanseDatum;
 	}
 	public String getDatumInEuropeesFormaat(Datum d) {
