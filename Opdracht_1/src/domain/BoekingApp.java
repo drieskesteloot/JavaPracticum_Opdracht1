@@ -1,4 +1,4 @@
-package opdracht_1d;
+package domain;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,7 +18,7 @@ import java.nio.file.StandardOpenOption;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import datum.Datum;
+import ui.BoekingUi;
 
 public class BoekingApp {
 
@@ -33,7 +33,7 @@ public class BoekingApp {
 			Huisjes = bestaandeHuisjesOphalen();
 			Boekingen = bestaandeBoekingenOphalen(Huisjes);
 
-			BoekingGUI boekingenVenster = new BoekingGUI();
+			BoekingUi boekingenVenster = new BoekingUi();
 			boekingenVenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			boekingenVenster.setSize(250,750);
 			boekingenVenster.setVisible(true);

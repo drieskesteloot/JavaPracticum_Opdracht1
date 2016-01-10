@@ -9,7 +9,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import datum.Datum;//gebruik model_1a.Datum voor eigen Datum klasse of model_1b.Datum voor Gregorian wrapper
+
+import domain.Datum;
 
 
 public class DatumTest {

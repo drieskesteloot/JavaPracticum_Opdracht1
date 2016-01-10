@@ -1,11 +1,11 @@
-package GregorianDatum;
+package domain;
 
 import java.util.Calendar;
 
 import java.util.GregorianCalendar;
 
 
-public class Datum {
+public class GregorianDatum {
 
 	private GregorianCalendar gC;
 
@@ -19,13 +19,13 @@ public class Datum {
 
 	private static final String[] Maanden = new String[] { "januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"};
 
-	public Datum() {
+	public GregorianDatum() {
 		GregorianCalendar Vandaag = new GregorianCalendar();
 		gC = (GregorianCalendar) Vandaag.clone();
 		gC.setLenient(false);
 	}
 
-	public Datum(int d, int m, int j) {
+	public GregorianDatum(int d, int m, int j) {
 			gC = new GregorianCalendar();
 		gC.setLenient(false);
 		gC.set(j,m-1,d);
@@ -38,13 +38,13 @@ public class Datum {
 		
 	}
 
-	public Datum(Datum d){
+	public GregorianDatum(GregorianDatum d){
 		gC = new GregorianCalendar();
 		gC.setLenient(false);
 		gC.set(d.getJaar(), d.getMaand()-1, d.getDag());
 	}
 
-	public Datum(String Dat){
+	public GregorianDatum(String Dat){
 		String DatumString[] = Dat.split("/");
 		String sDag = DatumString[0];
 		if (sDag.substring(0, 1) == "0") { sDag = sDag.substring(2,1); }	
@@ -87,11 +87,11 @@ public class Datum {
 	}
 
 	// Getters formaten
-	public String getDatumInAmerikaansFormaat(Datum x) {
+	public String getDatumInAmerikaansFormaat(GregorianDatum x) {
 		String AmerikaanseDatum = Integer.toString(x.getJaar()) + "/" + Integer.toString(x.getMaand()) + "/" + Integer.toString(x.getDag());
 		return AmerikaanseDatum;
 	}
-	public String getDatumInEuropeesFormaat(Datum x) {
+	public String getDatumInEuropeesFormaat(GregorianDatum x) {
 		String EuropeseDatum = Integer.toString(x.getDag()) + "/" + Integer.toString(x.getMaand()) + "/" + Integer.toString(x.getJaar());
 		return EuropeseDatum;
 	}
@@ -106,7 +106,7 @@ public class Datum {
 
 	// functies
 
-	public boolean kleinerDan(Datum d) { 
+	public boolean kleinerDan(GregorianDatum d) { 
 		if (d.getJaar() > this.getJaar()) {
 			return false;
 		} 
@@ -130,7 +130,7 @@ public class Datum {
 		}
 	}
 
-	public int verschilInJaren(Datum d) { 
+	public int verschilInJaren(GregorianDatum d) { 
 
 		int huidigeDag = this.getDag();
 		int huidigeMaand = this.getMaand();
@@ -180,7 +180,7 @@ public class Datum {
 		return aantalJaren;
 	}
 
-	public int verschilInMaanden(Datum d) {
+	public int verschilInMaanden(GregorianDatum d) {
 
 		//verschil in jaren al ophalen
 		int aantalMaanden = this.verschilInJaren(d)*12;
@@ -229,23 +229,23 @@ public class Datum {
 
 	}
 
-	public int verschilInDagen(Datum d) {
+	public int verschilInDagen(GregorianDatum d) {
 
 
 
 		int aantalDagen = 0;
 
-		Datum datum1;
-		Datum datum2;
+		GregorianDatum datum1;
+		GregorianDatum datum2;
 		if (this.kleinerDan(d) == true)
 		{
-			datum1 = new Datum (d)	;
-			datum2 = new Datum (this)	;
+			datum1 = new GregorianDatum (d)	;
+			datum2 = new GregorianDatum (this)	;
 		}
 		else
 		{	
-			datum1 = new Datum (this);
-			datum2 = new Datum (d);
+			datum1 = new GregorianDatum (this);
+			datum2 = new GregorianDatum (d);
 		}
 		if (datum1.getDag() == datum2.getDag() && datum1.getMaand() == datum2.getMaand()
 				&& datum1.getJaar() == datum2.getJaar()){
@@ -272,8 +272,8 @@ public class Datum {
 
 	}
 
-	public Datum veranderDatumObj(int aantalDagen) {
-		Datum date = new Datum (this);
+	public GregorianDatum veranderDatumObj(int aantalDagen) {
+		GregorianDatum date = new GregorianDatum (this);
 		date.veranderDatum(aantalDagen);
 		return date;
 
@@ -287,7 +287,7 @@ public class Datum {
 		return Integer.toString(getDag()) + " " + Maanden[getMaand()-1] +" "+ Integer.toString(getJaar());
 	}
 	
-	public int compareTo(Datum d) {
+	public int compareTo(GregorianDatum d) {
 		if (this.getJaar() == d.getJaar() && this.getMaand() == d.getMaand() && this.getDag() == d.getDag()) return 0;
 		if (this.kleinerDan(d)==true) return 1;
 		if (this.kleinerDan(d)==false) return -1;

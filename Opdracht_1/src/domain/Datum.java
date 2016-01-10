@@ -1,8 +1,6 @@
-package datum;
+package domain;
 
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 public class Datum {
 

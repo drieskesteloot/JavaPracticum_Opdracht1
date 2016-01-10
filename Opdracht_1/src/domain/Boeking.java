@@ -1,6 +1,4 @@
-package opdracht_1d;
-
-import datum.Datum;
+package domain;
 
 public class Boeking {
 	
